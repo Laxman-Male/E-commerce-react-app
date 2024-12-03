@@ -1,0 +1,301 @@
+To achieve your goal of adding items to the cart and displaying them in the Cart component, you'll need to follow these steps:
+
+Lift State Up: The Shopping component should hold the cart state because that's where the list of items needs to be stored. When the user clicks on the "Add to Cart" button, the Shopping component should update the cart state, and that state should be passed down to the Cart component for rendering.
+
+Passing State Between Components: You'll need to pass a function to the ShopList component that updates the cart state in the Shopping component. When an item is added to the cart, the Cart component will receive the updated cart list as a prop and render it.
+
+Steps in Detail:
+1. Shopping Component (Parent Component)
+This component will manage the cart state and pass the necessary props to ShopList and Cart.
+
+2. ShopList Component (Child Component)
+The ShopList component will handle the "Add to Cart" button click and call the passed function from Shopping to add the product to the cart.
+
+3. Cart Component
+This component will receive the cart items as props and display them.
+
+Example Code:
+1. Shopping.js (Parent Component)
+jsx
+Copy code
+import React, { useState } from 'react';
+import ShopList from './ShopList';
+import Cart from './Cart';
+
+const Shopping = () => {
+    // State to manage the cart items
+    const [cart, setCart] = useState([]);
+
+    // Function to add item to the cart
+    const addItemToCart = (product) => {
+        setCart((prevCart) => [...prevCart, product]);
+    };
+
+    const productData = [
+        { id: "1", title: "EarPhone", review: "⭐⭐⭐⭐", img: "img/e1.jpg", price: "100" },
+        { id: "2", title: "HeadPhone", review: "⭐⭐⭐", img: "img/h1.jpg", price: "699" },
+        { id: "3", title: "Wireless", review: "⭐⭐⭐⭐", img: "img/we1.jpg", price: "599" },
+        { id: "4", title: "SmartWatch", review: "⭐⭐⭐⭐", img: "img/ww1.jpeg", price: "799" },
+    ];
+
+    // State to toggle shop visibility
+    const [shop, setShop] = useState(true);
+    const handleShopToggle = () => {
+        setShop(!shop);
+    };
+
+    return (
+        <div>
+            <section>
+                <div className="font-bold text-4xl flex justify-center py-3">Shop by Category</div>
+                
+                <div className="flex justify-center">
+                    <div className="grid lg:grid-cols-4 gap-1 md:grid-cols-2 sm:grid-cols-1 w-3/4">
+                        {productData.map((product) => (
+                            <ShopList
+                                key={product.id}
+                                id={product.id}
+                                product={product}
+                                shop={shop}
+                                addToCart={addItemToCart} // Pass the addToCart function to ShopList
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex justify-center">
+                    <button
+                        className="border border-violet-500 text-cyan-100 font-bold w-40 h-10 rounded-full bg-violet-400 mt-3 text-xl"
+                        onClick={handleShopToggle}
+                    >
+                        {shop ? "Shop Less" : "Show All"}
+                    </button>
+                </div>
+            </section>
+
+            {/* Cart Section */}
+            <Cart cartItems={cart} />
+        </div>
+    );
+};
+
+export default Shopping;
+Explanation:
+Shopping holds the cart state and a function addItemToCart, which adds a product to the cart.
+We pass the addToCart function to each ShopList component.
+productData is an array of products, and each ShopList receives a product object as a prop.
+2. ShopList.js (Child Component)
+jsx
+Copy code
+import React from 'react';
+
+const ShopList = ({ id, product, shop, addToCart }) => {
+    const { title, review, img, price } = product;
+
+    const handleAddToCart = () => {
+        // When the button is clicked, call the addToCart function passed from Shopping
+        addToCart(product);
+    };
+
+    return (
+        <div id={id} className={`flex flex-col ${shop ? '' : 'hidden'}`}>
+            <img
+                className="w-3/4 h-48 relative m-2 items-center shadow-xl shadow-violet-700/80 rounded-tr-3xl rounded-bl-3xl"
+                src={img}
+                alt={title}
+            />
+            <p className="px-2 font-bold text-xl">{title}</p>
+            <p className="px-3 font-semibold text-xl">Review: {review}</p>
+            <p className="px-3 font-semibold text-2xl">Rs. {price}</p>
+            <button
+                className="self-start px-3 border border-violet-400 bg-violet-300 rounded-lg font-semibold text-lg h-10"
+                onClick={handleAddToCart}
+            >
+                Add to Cart
+            </button>
+        </div>
+    );
+};
+
+export default ShopList;
+Explanation:
+ShopList receives product and addToCart as props from Shopping.
+When the "Add to Cart" button is clicked, the handleAddToCart function calls addToCart(product) and adds the selected product to the cart in the Shopping component.
+3. Cart.js (Cart Component)
+jsx
+Copy code
+import React from 'react';
+
+const Cart = ({ cartItems }) => {
+    return (
+        <div className="fixed top-12 right-1 border border-black w-1/2 p-4">
+            <h2 className="font-bold text-2xl">Your Cart</h2>
+            {cartItems.length === 0 ? (
+                <p>Your cart is empty</p>
+            ) : (
+                <div>
+                    {cartItems.map((item, index) => (
+                        <div key={index} className="flex justify-between border-b border-gray-300 py-2">
+                            <img
+                                className="w-16 h-16 object-cover rounded"
+                                src={item.img}
+                                alt={item.title}
+                            />
+                            <div className="ml-4">
+                                <p className="font-semibold">{item.title}</p>
+                                <p>Price: Rs. {item.price}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default Cart;
+Explanation:
+Cart receives the cartItems as a prop from the Shopping component.
+It displays the cart items by mapping over the cartItems array. Each product's image, title, and price are displayed.
+How It Works:
+State Management in Shopping: The Shopping component manages the cart state with useState. This state holds the products added to the cart.
+Adding Products to Cart: The ShopList component triggers the addToCart function when the "Add to Cart" button is clicked. This function adds the selected product to the cart in the Shopping component.
+Displaying Cart Items: The Cart component receives the cartItems as a prop from the Shopping component and displays the items in the cart.
+Key Concepts Used:
+Lifting State Up: The cart state is managed in the Shopping component (the parent component). ShopList and Cart both rely on this shared state.
+Passing Functions as Props: Shopping passes the addToCart function to ShopList. ShopList calls this function to update the cart state.
+Conditional Rendering: The ShopList component uses the shop prop to conditionally render items. If shop is true, items are displayed; otherwise, they are hidden.
+This setup allows you to add products to the cart in a clean, modular way, and easily manage state across different components.
+
+
+
+
+
+
+import React, { useEffect, useState } from 'react'
+
+const Cart = ({ cartitem = [] }) => {
+  const [quantity, setQuantity] = useState({});
+  const [total, setTotal] = useState(0);
+  const [removedItems, setRemovedItems] = useState({}); // Track removed state for each item
+  const [cart, setCart] = useState(cartitem);
+
+  // Calculate total based on quantity and item price
+  useEffect(() => {
+    let newTotal = 0;
+    cartitem.forEach(item => {
+      const itemQuantity = quantity[item.id] || 1;
+      newTotal += parseFloat(item.price) * itemQuantity;
+    });
+    setTotal(newTotal);
+  }, [cartitem, quantity]);
+
+  // Handle quantity increase
+  const handlePlus = (item) => {
+    setQuantity((prevQuantity) => {
+      const currentQuantity = prevQuantity[item.id] || 1;
+      return {
+        ...prevQuantity,
+        [item.id]: currentQuantity + 1,
+      };
+    });
+  };
+
+  // Handle quantity decrease
+  const handleMinus = (item) => {
+    setQuantity((prevQuantity) => {
+      const currentQuantity = prevQuantity[item.id] || 0;
+      if (currentQuantity > 1) {
+        return {
+          ...prevQuantity,
+          [item.id]: currentQuantity - 1,
+        };
+      }
+      return prevQuantity;
+    });
+  };
+
+  // Handle item removal
+  const handleRemove = (itemId) => {
+    setRemovedItems((prevRemovedItems) => ({
+      ...prevRemovedItems,
+      [itemId]: true, // Mark this item as removed
+    }));
+
+    // Optionally, you can also update the cart to remove the item entirely
+    setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
+  };
+
+  return (
+    <div className='fixed top-12 right-1 max-h-[80vh] overflow-y-auto border border-violet-300 w-1/2 bg-violet-400 rounded-xl'>
+      <div className='flex flex-col justify-between h-full border'>
+        <div className='border border-violet-300 grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1'>
+          {cartitem.map((item) => (
+            <div key={item.id}>
+              <div>
+                <img
+                  className='w-3/4 h-auto m-2 items-center shadow-xl shadow-violet-700/80 rounded-tr-3xl rounded-bl-3xl'
+                  src={item.img}
+                  alt={item.title}
+                />
+                <p className='px-2 font-bold text-md'>Id:-{item.id}</p>
+                <p className='px-2 font-bold text-lg'>{item.title}</p>
+                <p className='px-3 font-semibold text-xl'> Rs.{item.price}</p>
+
+                <div className='flex items-center border border-red-500'>
+                  <button
+                    className='border border-red-800 font-bold w-5'
+                    onClick={() => handleMinus(item)}
+                  >
+                    -
+                  </button>
+                  <p className='border border-red-800 px-2'>{quantity[item.id] || 1}</p>
+                  <button
+                    className='border border-red-800 font-bold w-6'
+                    onClick={() => handlePlus(item)}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Remove button with conditional rendering based on removed state */}
+              <button
+                onClick={() => handleRemove(item.id)}
+                disabled={removedItems[item.id]} // Disable the button if the item is removed
+              >
+                {removedItems[item.id] ? 'Removed' : 'Remove'}
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className='border border-violet-400 rounded-lg cursor-pointer self-center p-3 bg-gradient-to-b from-violet-500 to-violet-100 text-md font-semibold hover:bg-gradient-to-t'>
+          <p>Total: Rs.{total}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Cart;
+Key Changes:
+removedItems state:
+
+This state is an object where each key is an item.id and the value is a boolean (true or false) that indicates whether the item has been removed or not.
+setRemovedItems((prev) => ({ ...prev, [itemId]: true })) marks an item as removed.
+Remove Button:
+
+The Remove button now conditionally displays "Removed" if the item is in the removedItems state.
+The button is also disabled (disabled={removedItems[item.id]}) when the item is removed.
+Handling handleRemove:
+
+When the remove button is clicked, the handleRemove function sets the item as removed by updating the removedItems state and removing the item from the cart array using setCart.
+Disable the Button:
+
+After removing an item, its corresponding remove button gets disabled, preventing it from being clicked again.
+What this accomplishes:
+Per-item removal: The remove button now works on a per-item basis. Clicking the "Remove" button for one item will only affect that item and not all items in the cart.
+Conditional button text: The button text changes to "Removed" for the item that was removed.
+Disabling the button: The button is disabled after removal to prevent the user from clicking it again.
+This solution should now work as expected, and only the relevant item's button will change to "Removed", without affecting other items in the cart.
