@@ -80,7 +80,7 @@ console.log(removeitem)
             <div>
                 {/* <div className={`flex   flex-col ${shop}`}> */}
                 <div id={id} className= {`flex    sm:flex-row md:flex-col lg:flex-col  ssm:flex-row    flex-col ${shop ? ' ': 'hidden'} `}>
-                     <img className='md:w-3/4 lg:w-3/4 ssm:w-1/2 sm:w-1/2 container md:border   h-48  relative m-2 items-center shadow-xl shadow-violet-700/80  rounded-tr-3xl rounded-bl-3xl  ' src={img} />
+                     <img className='md:w-1/2 lg:w-3/4 ssm:w-1/2 sm:w-1/2 container md:border   h-48  relative m-2 items-center shadow-xl shadow-violet-700/80  rounded-tr-3xl rounded-bl-3xl  ' src={img} />
                      <div className='  '>
 
                     <p className=' px-2 font-bold text-xl '> {title }</p>

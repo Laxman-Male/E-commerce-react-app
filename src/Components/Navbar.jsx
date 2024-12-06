@@ -1,21 +1,86 @@
 import React from 'react'
+import { useState } from 'react';
 import Cart from './Cart'
+import { Offcanvas, Button, Dropdown } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Navbar = () => {
     // const handleCartDesign=()=>{
     //     console.log("cart design")
     // }
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     return (
         <>
             <div>
 
-                <div className='flex justify-between mr-8 bg-violet-50 '>
+                <div className='flex justify-between bg-violet-50 '>
                     <div>
 
-                        <button className='border border-black flex justify-start mt-2'> 
+                        {/* <button className='border border-black flex justify-start mt-2'> 
                             <img src='img/setting.png' className='w-6 mix-blend-darken'/>
-                             </button>
+                             </button> */}
+                        <div className=' mt-2'>
+                            <Button variant='outline-secondary' onClick={handleShow}>
+                                <img src='img/setting.png' className='w-6 mix-blend-darken ' />
+                            </Button>
+
+                            <Offcanvas show={show} onHide={handleClose} placement="start">
+                                <Offcanvas.Header closeButton>
+                                    <Offcanvas.Title >Setting </Offcanvas.Title>
+                                </Offcanvas.Header>
+                                <Offcanvas.Body>
+                                    <div>
+                                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laboriosam, repudiandae?
+                                    </div>
+                                    <Dropdown className="mt-3 ">
+                                        <Dropdown.Toggle variant="primary" id="dropdown-basic"  >
+                                            Languages
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item href="#">Action</Dropdown.Item>
+                                            <Dropdown.Item href="#">Another action</Dropdown.Item>
+                                            <Dropdown.Item href="#">Something else here</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </Offcanvas.Body>
+                            </Offcanvas>
+                        </div>
                     </div>
+                    {/* <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                            Link with href
+                        </a> */}
+                    {/* //     <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                    //         Button with data-bs-target
+                    //     </button>
+
+                    //     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                    //         <div class="offcanvas-header">
+                    //             <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+                    //             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    //         </div>
+                    //         <div class="offcanvas-body">
+                    //             <div>
+                    //                 Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+                    //             </div>
+                    //             <div class="dropdown mt-3">
+                    //                 <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    //                     Dropdown button
+                    //                 </button>
+                    //                 <ul class="dropdown-menu">
+                    //                     <li><a class="dropdown-item" href="#">Action</a></li>
+                    //                     <li><a class="dropdown-item" href="#">Another action</a></li>
+                    //                     <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    //                 </ul>
+                    //             </div>
+                    //         </div>
+                    //     </div>
+                    // </div> */}
                     {/* <ul>
                         <li className='font-bold text-3xl'> Logo </li>
                         </ul> */}
