@@ -104,8 +104,8 @@ const Shopping = ({addcart}) => {
                     <div className='font-bold text-4xl flex  justify-center py-3'>
                         Shop by Category
                     </div>
-                    <div className='flex justify-center'>
-                        <div className='  grid lg:grid-cols-3 xl:grid-cols-4   gap-2   rounded-lg  shadow-2xl  md:grid-cols-2 sm:grid-cols-1 p-5'>
+                    <div className='flex justify-center '>
+                        <div className='  grid lg:grid-cols-3 xl:grid-cols-4   gap-2   rounded-lg  shadow-2xl  md:grid-cols-2 sm:grid-cols-1 ssm:grid-cols-1   p-5'>
                             {productData.map((pro) => (
 
 
